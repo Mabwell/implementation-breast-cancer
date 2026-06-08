@@ -5,7 +5,8 @@ WORKDIR /src
 # Install runtime deps only
 COPY breast-cancer-ml/requirements.txt /tmp/requirements.txt
 RUN python -m pip install --upgrade pip && \
-    pip install --no-cache-dir -r /tmp/requirements.txt
+    pip install --no-cache-dir -r /tmp/requirements.txt && \
+    pip install --no-cache-dir gunicorn
 
 # Copy Flask app and pre-trained models (you must commit breast-cancer-ml/models/)
 COPY BreastCancerProject/ /src/app/
