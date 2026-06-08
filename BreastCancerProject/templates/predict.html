@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Predict{% endblock %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title">Patient measurement entry</h5>
+    <p class="text-muted small">Provide clinical measurements (features). Hover labels for brief descriptions.</p>
+
+    {% if result %}
+      <div class="alert {{ 'alert-danger' if result=='Malignant' else 'alert-success' }}">
+        <strong>Result:</strong> {{ result }} — probability {{ (probability*100)|round(2) }}%
+        <div class="mt-2"><small>Patient: {{ patient_name }}</small></div>
+      </div>
+    {% endif %}
+
+    <form method="post" class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Patient name</label>
+        <input name="patient_name" class="form-control" placeholder="Patient full name" value="{{ patient_name if patient_name is defined else '' }}">
+      </div>
+
+      {% for fname in FEATURE_NAMES %}
+      <div class="col-md-6">
+        <label class="form-label" title="Enter value for {{ fname }}">{{ fname | title }}</label>
+        <input name="{{ fname }}" class="form-control" inputmode="decimal" placeholder="e.g. 12.34" required>
+        <div class="form-text small">See dataset description for clinical meaning of {{ fname }}.</div>
+      </div>
+      {% endfor %}
+
+      <div class="col-12">
+        <button class="btn btn-primary">Predict</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

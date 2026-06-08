@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  web:
+    build: ..
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../breast-cancer-ml/models:/app/model:ro   # mount models so you can update without rebuilding
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=change_this_in_prod
+    restart: unless-stopped

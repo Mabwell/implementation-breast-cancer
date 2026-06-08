@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <h4 class="card-title">Project overview</h4>
+        <p class="card-text">
+          This project uses the Breast Cancer Wisconsin (Diagnostic) dataset and a Logistic Regression model
+          to provide early prediction and detection assistance. Enter tumor measurements on the Predict page.
+        </p>
+        <ul>
+          <li>Model: Logistic Regression (scikit-learn)</li>
+          <li>Database: SQLite (prediction history and users)</li>
+          <li>Frontend: Bootstrap 5, clean medical style</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Model evaluation</h5>
+        {% if metrics %}
+          <div class="row g-2">
+            <div class="col-sm-4"><strong>Accuracy</strong><div class="fs-4 text-primary">{{ metrics.accuracy | round(4) }}</div></div>
+            <div class="col-sm-4"><strong>Precision</strong><div class="fs-4 text-primary">{{ metrics.precision | round(4) }}</div></div>
+            <div class="col-sm-4"><strong>Recall</strong><div class="fs-4 text-primary">{{ metrics.recall | round(4) }}</div></div>
+          </div>
+          <hr>
+          <h6>Confusion Matrix</h6>
+          <table class="table table-sm table-bordered w-50">
+            <thead><tr><th></th><th>Pred: Benign (0)</th><th>Pred: Malignant (1)</th></tr></thead>
+            <tbody>
+              <tr><th>True: Benign (0)</th><td>{{ metrics.confusion_matrix[0][0] }}</td><td>{{ metrics.confusion_matrix[0][1] }}</td></tr>
+              <tr><th>True: Malignant (1)</th><td>{{ metrics.confusion_matrix[1][0] }}</td><td>{{ metrics.confusion_matrix[1][1] }}</td></tr>
+            </tbody>
+          </table>
+        {% else %}
+          <div class="text-warning">Model or scaler not loaded. Run the training script and ensure model/ contains files.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h6 class="card-title">Quick actions</h6>
+        <a href="{{ url_for('predict') }}" class="btn btn-success w-100 mb-2">Make a prediction</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary w-100">View history</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

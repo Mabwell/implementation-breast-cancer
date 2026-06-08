@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title">Prediction history</h5>
+    {% if records %}
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Timestamp</th>
+            <th>Patient</th>
+            <th>Result</th>
+            <th>Probability</th>
+            <th>Key features</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in records %}
+          <tr class="{{ 'table-danger' if r.prediction_result=='Malignant' else 'table-success' }}">
+            <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ r.patient_name }}</td>
+            <td><strong>{{ r.prediction_result }}</strong></td>
+            <td>{{ (r.probability_score*100)|round(2) }}%</td>
+            <td>
+              radius: {{ r.mean_radius }}, texture: {{ r.mean_texture }}, area: {{ r.mean_area }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="text-muted">No records yet. Use Predict to create history.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

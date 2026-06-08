@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title text-center mb-3">{{ 'Register' if register else 'Login' }}</h5>
+
+        {% if register %}
+        <form method="post" action="{{ url_for('register') }}">
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input name="username" class="form-control" required placeholder="Choose a username">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input name="password" type="password" class="form-control" required placeholder="Create a secure password">
+          </div>
+          <div class="d-grid">
+            <button class="btn btn-primary">Register</button>
+          </div>
+          <div class="mt-3 text-center">
+            <a href="{{ url_for('login') }}">Already registered? Login</a>
+          </div>
+        </form>
+        {% else %}
+        <form method="post" action="{{ url_for('login') }}">
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input name="username" class="form-control" required placeholder="Your username">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input name="password" type="password" class="form-control" required placeholder="Your password">
+          </div>
+          <div class="d-grid">
+            <button class="btn btn-primary">Login</button>
+          </div>
+          <div class="mt-3 text-center">
+            <a href="{{ url_for('register') }}">Don't have an account? Register</a>
+          </div>
+        </form>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "breast-cancer-ml"
+version = "0.1.0"
+description = "A machine learning project for training a model on the Breast Cancer Wisconsin dataset."
+authors = ["Your Name <your.email@example.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+scikit-learn = "^1.0"
+pandas = "^1.3"
+numpy = "^1.21"
+matplotlib = "^3.4"
+seaborn = "^0.11"
+jupyter = "^1.0"
+pytest = "^6.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

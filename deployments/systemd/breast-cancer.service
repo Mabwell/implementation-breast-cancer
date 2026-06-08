@@ -1,0 +1,14 @@
+[Unit]
+Description=Breast Cancer Flask App (Docker)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+# Run the image built from your repo; mount host models directory into container
+# Update /home/ubuntu/breast-cancer-ml/models to the absolute path on the server that contains cancer_model.pkl/scaler.pkl
+ExecStart=/usr/bin/docker run --rm --name breast-cancer-app -p 5000:5000 -v /home/ubuntu/breast-cancer-ml/models:/app/model:ro -e SECRET_KEY="change_in_prod" your-registry/breast-cancer-app:latest
+ExecStop=/usr/bin/docker stop breast-cancer-app
+
+[Install]
+WantedBy=multi-user.target

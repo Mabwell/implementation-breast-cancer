@@ -1,0 +1,12 @@
+[Unit]
+Description=Breast Cancer Machine Learning Service
+After=network.target
+
+[Service]
+User=YOUR_USERNAME
+WorkingDirectory=/path/to/breast-cancer-ml
+ExecStart=/usr/bin/python3 /path/to/breast-cancer-ml/src/train_model.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

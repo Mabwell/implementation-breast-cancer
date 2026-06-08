@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: breast-cancer-service
+  labels:
+    app: breast-cancer
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 5000
+      protocol: TCP
+  selector:
+    app: breast-cancer

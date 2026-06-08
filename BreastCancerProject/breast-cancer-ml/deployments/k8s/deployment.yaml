@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: breast-cancer-ml
+  labels:
+    app: breast-cancer-ml
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: breast-cancer-ml
+  template:
+    metadata:
+      labels:
+        app: breast-cancer-ml
+    spec:
+      containers:
+      - name: breast-cancer-ml
+        image: <your-docker-image>  # Replace with your Docker image name
+        ports:
+        - containerPort: 5000  # Adjust the port as necessary
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        volumeMounts:
+        - name: model-volume
+          mountPath: /app/models  # Adjust the path as necessary
+      volumes:
+      - name: model-volume
+        persistentVolumeClaim:
+          claimName: model-pvc  # Ensure you have a PVC defined for your model storage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: breast-cancer-ml
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5000  # Adjust the port as necessary
+    targetPort: 5000
+  selector:
+    app: breast-cancer-ml

@@ -1,0 +1,9 @@
+/* Clean, medical styling */
+body { font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+.navbar-brand { color: #0d6efd !important; }
+.card { border-radius: 8px; }
+.table-success { background-color: #e9f7ef !important; }
+.table-danger { background-color: #fdecea !important; }
+.alert-success { background-color: #e6f4ea; color: #0f5132; }
+.alert-danger { background-color: #fff1f0; color: #7a1f1f; }
+footer { background: #ffffff; }
