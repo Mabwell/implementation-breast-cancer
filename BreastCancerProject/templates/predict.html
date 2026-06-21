@@ -10,6 +10,15 @@
       <div class="alert {{ 'alert-danger' if result=='Malignant' else 'alert-success' }}">
         <strong>Result:</strong> {{ result }} — probability {{ (probability*100)|round(2) }}%
         <div class="mt-2"><small>Patient: {{ patient_name }}</small></div>
+        {% if tumor_image %}
+        <div class="mt-3">
+          <img src="{{ url_for('static', filename='tmp/' + tumor_image) }}" alt="Illustrative diagram" style="max-width:220px;" class="rounded border">
+          <div class="form-text">Illustrative diagram generated from input measurements — not an actual scan.</div>
+        </div>
+        {% endif %}
+        {% if advice %}
+        <div class="mt-2"><strong>Advice:</strong> {{ advice }}</div>
+        {% endif %}
       </div>
     {% endif %}
 

@@ -14,6 +14,8 @@
             <th>Result</th>
             <th>Probability</th>
             <th>Key features</th>
+            <th>Diagram</th>
+            <th>Advice</th>
           </tr>
         </thead>
         <tbody>
@@ -26,6 +28,14 @@
             <td>
               radius: {{ r.mean_radius }}, texture: {{ r.mean_texture }}, area: {{ r.mean_area }}
             </td>
+            <td>
+              {% if r.tumor_image %}
+              <img src="{{ url_for('static', filename='tmp/' + r.tumor_image) }}" alt="diagram" style="max-width:60px;">
+              {% else %}
+              <span class="text-muted small">—</span>
+              {% endif %}
+            </td>
+            <td class="small">{{ r.advice_text or '—' }}</td>
           </tr>
           {% endfor %}
         </tbody>

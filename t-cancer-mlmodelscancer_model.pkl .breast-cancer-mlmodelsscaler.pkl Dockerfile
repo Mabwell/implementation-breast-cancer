@@ -1,0 +1,23 @@
+[33mcommit 43e5c0af28caf4f617e7b47e44a3777b0e04c886[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Your Name <you@example.com>
+Date:   Mon Jun 8 01:12:07 2026 -0700
+
+    Fix: install gunicorn for Render runtime
+
+[33mcommit c3e18862653a5926432e41d1c6e4b1fa610d0046[m
+Author: Your Name <you@example.com>
+Date:   Mon Jun 8 01:02:56 2026 -0700
+
+    Deploy: use prebuilt models and updated Dockerfile
+
+[33mcommit 441485c8dc3cd43a934d44f7adea9da1a0534900[m
+Author: mabwell <mawellfred@gmail.com>
+Date:   Mon Jun 8 00:13:43 2026 -0700
+
+    first commit
+
+[33mcommit 0a9967952e5f00ceeadf0c82da71c69a30b05471[m
+Author: mabwell <mawellfred@gmail.com>
+Date:   Mon Jun 8 00:10:38 2026 -0700
+
+    Deploy: add Dockerfile

@@ -24,6 +24,8 @@ from joblib import load
 import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
+from predict_api import bp as predict_api_bp, map_category, map_risk_advice, make_tumor_illustration
+import uuid
 
 BASE_DIR = os.path.dirname(__file__)
 DB_PATH = os.path.join(BASE_DIR, "database.db")
@@ -40,6 +42,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+
+app.register_blueprint(predict_api_bp)
 
 # Use the sklearn dataset feature names to keep form order consistent with training
 FEATURE_NAMES = list(load_breast_cancer().feature_names)  # 30 feature names
@@ -67,6 +71,9 @@ class PredictionRecord(db.Model):
     features_json = db.Column(db.Text, nullable=False)
     prediction_result = db.Column(db.String(20), nullable=False)  # 'Benign' or 'Malignant'
     probability_score = db.Column(db.Float, nullable=False)
+    risk_category = db.Column(db.String(20), nullable=True)
+    advice_text = db.Column(db.Text, nullable=True)
+    tumor_image = db.Column(db.String(255), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Create DB tables if they don't exist
@@ -190,8 +197,23 @@ def predict():
         pred_label = int(model.predict(x_scaled)[0])
         prob = float(model.predict_proba(x_scaled)[0][1])  # probability of malignant class
         result_text = "Malignant" if pred_label == 1 else "Benign"
+        category, _urgency = map_category(prob)
+        advice_text = map_risk_advice(category)
+
+        # Generate illustrative diagram (not a real scan) for this prediction
+        tumor_fname = f"tumor_{uuid.uuid4().hex}.png"
+        tumor_dir = os.path.join(app.static_folder, "tmp")
+        os.makedirs(tumor_dir, exist_ok=True)
+        tumor_path = os.path.join(tumor_dir, tumor_fname)
+        feature_map_preview = {name: float(features[idx]) for idx, name in enumerate(FEATURE_NAMES)}
+        try:
+            make_tumor_illustration(feature_map_preview.get("mean radius", 10.0), category, prob, tumor_path)
+        except Exception as e:
+            app.logger.error(f"Could not generate tumor illustration: {e}")
+            tumor_fname = None
+
         # Store record
-        feature_map = {name: float(features[idx]) for idx, name in enumerate(FEATURE_NAMES)}
+        feature_map = feature_map_preview
         rec = PredictionRecord(
             user_id=current_user.id,
             patient_name=patient_name,
@@ -203,10 +225,21 @@ def predict():
             features_json=json.dumps(feature_map),
             prediction_result=result_text,
             probability_score=prob,
+            risk_category=category,
+            advice_text=advice_text,
+            tumor_image=tumor_fname,
         )
         db.session.add(rec)
         db.session.commit()
-        return render_template("predict.html", FEATURE_NAMES=FEATURE_NAMES, result=result_text, probability=prob, patient_name=patient_name)
+        return render_template(
+            "predict.html",
+            FEATURE_NAMES=FEATURE_NAMES,
+            result=result_text,
+            probability=prob,
+            patient_name=patient_name,
+            advice=advice_text,
+            tumor_image=tumor_fname,
+        )
     # GET: show the prediction form
     return render_template("predict.html", FEATURE_NAMES=FEATURE_NAMES)
 
