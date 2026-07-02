@@ -27,7 +27,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, confu
 from predict_api import bp as predict_api_bp, map_category, map_risk_advice, make_tumor_illustration
 import uuid
 
-BASE_DIR = os.path.dirname(__file__)
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DB_PATH = os.path.join(BASE_DIR, "database.db")
 MODEL_DIR = os.path.join(BASE_DIR, "model")
 MODEL_PATH = os.path.join(MODEL_DIR, "cancer_model.pkl")
